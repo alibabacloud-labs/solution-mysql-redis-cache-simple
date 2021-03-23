@@ -92,8 +92,19 @@ public class RedisCache {
     Scanner scanner = new Scanner(System.in);
     String SG_REDISURL = scanner.nextLine();
 
+    System.out.print("Redis password: ");
+    String SG_REDIS_PASSWORD = scanner.nextLine();
+
     // Connecting to Redis server
     Jedis jedis = new Jedis(SG_REDISURL);
+
+    // Instance password
+    String authString = jedis.auth(SG_REDIS_PASSWORD);
+    if (!authString.equals("OK")) {
+      System.err.println("Redis AUTH Failed: " + authString);
+      return;
+    }
+
     System.out.println("Connecting to Redis server successfully!");
 
     // Check whether server is running or not
