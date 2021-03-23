@@ -97,3 +97,14 @@ resource "alicloud_db_instance" "instance" {
   security_group_ids = [alicloud_security_group.group.id]
   instance_name      = var.rds_mysql_name
 }
+
+resource "alicloud_db_account" "account" {
+  instance_id = alicloud_db_instance.instance.id
+  name        = "test_mysql"
+  password    = "N1cetest"
+}
+
+resource "alicloud_db_database" "default" {
+  instance_id = alicloud_db_instance.instance.id
+  name        = "test_mysql"
+}
