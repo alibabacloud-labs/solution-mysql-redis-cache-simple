@@ -85,30 +85,36 @@ public class RedisCache {
    * SG_DBHOST   - MySQL end point, and SG_DBUSER, SG_DBUSERPW, SG_DBNAME
    */
   public static void main(String[] args) {
-    System.out.println("Please input environment parameters: ");
+    String SG_REDISURL = System.getenv("SG_REDISURL");
+    String SG_REDIS_PASSWORD = System.getenv("SG_REDIS_PASSWORD");
+    String SG_DBHOST = System.getenv("SG_DBHOST");
+    String SG_DBNAME = System.getenv("SG_DBNAME");
+    String SG_DBUSER = System.getenv("SG_DBUSER");
+    String SG_DBUSERPW = System.getenv("SG_DBUSERPW");
 
-    // Get Redis connection
-    System.out.print("Redis URL: ");
-    Scanner scanner = new Scanner(System.in);
-    String SG_REDISURL = scanner.nextLine();
+    System.out.println("SG_REDISURL: " + SG_REDISURL);
+    System.out.println("SG_REDIS_PASSWORD: " + SG_REDIS_PASSWORD);
+    System.out.println("SG_DBHOST: " + SG_DBHOST);
+    System.out.println("SG_DBNAME: " + SG_DBNAME);
+    System.out.println("SG_DBUSER: " + SG_DBUSER);
+    System.out.println("SG_DBUSERPW: " + SG_DBUSERPW);
 
     // Connecting to Redis server
     Jedis jedis = new Jedis(SG_REDISURL);
+
+    // Instance password
+    String authString = jedis.auth(SG_REDIS_PASSWORD);
+    if (!authString.equals("OK")) {
+      System.err.println("Redis AUTH Failed: " + authString);
+      return;
+    }
+
     System.out.println("Connecting to Redis server successfully!");
 
     // Check whether server is running or not
     System.out.println("Redis Server is running: " + jedis.ping());
 
     // Set up MySQL connection
-    System.out.print("RDS MySQL URL: ");
-    String SG_DBHOST = scanner.nextLine();
-    System.out.print("RDS database name: ");
-    String SG_DBNAME = scanner.nextLine();
-    System.out.print("RDS database username: ");
-    String SG_DBUSER = scanner.nextLine();
-    System.out.print("RDS database password: ");
-    String SG_DBUSERPW = scanner.nextLine();
-
     String myUrl = "jdbc:mysql://" + SG_DBHOST + "/" + SG_DBNAME;
 
     // SQL Query, and ResulT
@@ -116,6 +122,7 @@ public class RedisCache {
 
     // Get the first query
     System.out.print("Enter a SQL Query (Input 'EXIT' or 'QUIT' to exit) : ");
+    Scanner scanner = new Scanner(System.in);
     query = scanner.nextLine();
 
     try {
@@ -144,9 +151,9 @@ public class RedisCache {
         System.out.print("Enter a SQL Query : "); // get the next query
         query = scanner.nextLine();
       }
-    } catch (SQLException ex) { // illegal SQL Query will cause the program exit
-      Logger lgr = Logger.getLogger("JdbcMySQLVersion.class.getName()");
-      lgr.log(Level.SEVERE, ex.getMessage(), ex);
+    } catch (Exception ex) { // illegal SQL Query will cause the program exit
+      System.err.println(ex.getMessage());
+      ex.printStackTrace();
     }
   }
 }

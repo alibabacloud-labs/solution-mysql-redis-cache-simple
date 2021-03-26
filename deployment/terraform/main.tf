@@ -108,3 +108,10 @@ resource "alicloud_db_database" "default" {
   instance_id = alicloud_db_instance.instance.id
   name        = "test_mysql"
 }
+
+resource "alicloud_db_account_privilege" "privilege" {
+  instance_id  = alicloud_db_instance.instance.id
+  account_name = alicloud_db_account.account.name
+  privilege    = "ReadWrite"
+  db_names     = alicloud_db_database.default.*.name
+}
