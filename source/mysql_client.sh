@@ -1,4 +1,4 @@
 #!/bin/bash
-source env.sh
+source ./env.sh
 
-mysql -u${SG_DBUSER} -p{SG_DBUSERPW} -h${SG_DBHOST} ${SG_DBNAME}
+mysql -u${SG_DBUSER} -p${SG_DBUSERPW} -h${SG_DBHOST} ${SG_DBNAME}
