@@ -76,7 +76,7 @@ public class RedisCache {
    * Time to Live value for Redis Key
    * Unit: second
    */
-  public static final int TTL = 5;
+  public static final int TTL = 10;
 
   /**
    * Scanner input the following environment parameters for Redis and MySQL.

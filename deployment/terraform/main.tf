@@ -83,6 +83,12 @@ resource "alicloud_kvstore_instance" "example" {
   instance_class    = "redis.master.micro.default"
 }
 
+resource "alicloud_kvstore_account" "example" {
+  account_name     = "test_redis"
+  account_password = "N1cetest"
+  instance_id      = alicloud_kvstore_instance.example.id
+}
+
 ######## RDS MySQL
 variable "rds_mysql_name" {
   default = "rds_mysql"
