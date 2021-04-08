@@ -11,7 +11,7 @@ variable "name" {
 ######## Security group
 resource "alicloud_security_group" "group" {
   name        = "sg_solution_mysql_redis_cache_simple"
-  description = "Security group for mysql redis cache smple solution"
+  description = "Security group for mysql redis cache sample solution"
   vpc_id      = alicloud_vpc.vpc.id
 }
 
